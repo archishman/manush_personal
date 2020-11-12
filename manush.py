@@ -11,4 +11,5 @@ import uci
 def run_manush():
     uci.uci_communication()
 
-run_manush()
+if __name__ == '__main__':
+    run_manush()
