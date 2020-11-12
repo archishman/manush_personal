@@ -94,7 +94,7 @@ class UniversalChessInterface:
     """
     def go(self):
         #TODO change "make_random move" to a smarter move generation function
-        move = self._engine.make_random_move() 
+        move = self._engine.best_move() 
         print("bestmove "+move)
         pass
 
@@ -121,13 +121,18 @@ class UniversalChessInterface:
             elif (input_str == "isready"):
                 self.isready()
             elif (input_str == "ucinewgame"):
-                do_ucinewgame()
+                self.ucinewgame()
             elif (input_str.startswith("position")):
-                do_position(input_str[9:])
+                self.position(input_str[9:])
             elif (input_str.startswith("go")):
-                do_go()
-            elif (input_str == "print"):
-                do_print()
+                self.go()
+            elif (input_str == "stop"):
+                self._engine.stop()
+            elif (input_str == "quit"):
+                break
+            else:
+                print('invalid command')
+            
 
 
 

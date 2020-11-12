@@ -9,7 +9,7 @@ import uci
 [run_manush()] starts and runs the engine.
 """
 def run_manush():
-    uci.uci_communication()
+    uci.run()
 
 if __name__ == '__main__':
     run_manush()

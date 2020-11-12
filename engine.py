@@ -22,4 +22,12 @@ class Engine:
         if moves:
             for move in moves:
                 self._board.push_uci(move)
+    def best_move(self):
+        pass
+    def go(self, searchmoves = None, movetime = 10000, infinite = False):
+        pass
+
+    def stop(self):
+        pass
+    
         
