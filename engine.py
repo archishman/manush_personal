@@ -23,9 +23,9 @@ class Engine:
             for move in moves:
                 self._board.push_uci(move)
     def best_move(self):
-        pass
+        return 'e2e4'
     def go(self, searchmoves = None, movetime = 10000, infinite = False):
-        pass
+        return 'e2e4'
 
     def stop(self):
         pass
