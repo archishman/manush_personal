@@ -9,7 +9,7 @@ class Game:
 		self.actionSpace = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], dtype=np.int)
 		self.pieces = {'1':'X', '0': '-', '-1':'O'}
 		self.grid_shape = (6,7)
-		self.input_shape = (2,6,7)
+		self.input_shape = (6,7,2)
 		self.name = 'connect4'
 		self.state_size = len(self.gameState.binary)
 		self.action_size = len(self.actionSpace)

@@ -60,8 +60,6 @@ class Gen_Model():
 		layers = self.model.layers
 		for i, l in enumerate(layers):
 			x = l.get_weights()
-			print('LAYER ' + str(i))
-
 			try:
 				weights = x[0]
 				s = weights.shape
@@ -120,7 +118,7 @@ class Residual_CNN(Gen_Model):
 		x = Conv2D(
 		filters = filters
 		, kernel_size = kernel_size
-		, data_format="channels_first"
+		, data_format="channels_last"
 		, padding = 'same'
 		, use_bias=False
 		, activation='linear'
@@ -140,7 +138,7 @@ class Residual_CNN(Gen_Model):
 		x = Conv2D(
 		filters = filters
 		, kernel_size = kernel_size
-		, data_format="channels_first"
+		, data_format="channels_last"
 		, padding = 'same'
 		, use_bias=False
 		, activation='linear'
@@ -157,7 +155,7 @@ class Residual_CNN(Gen_Model):
 		x = Conv2D(
 		filters = 1
 		, kernel_size = (1,1)
-		, data_format="channels_first"
+		, data_format="channels_last"
 		, padding = 'same'
 		, use_bias=False
 		, activation='linear'
@@ -196,7 +194,7 @@ class Residual_CNN(Gen_Model):
 		x = Conv2D(
 		filters = 2
 		, kernel_size = (1,1)
-		, data_format="channels_first"
+		, data_format="channels_last"
 		, padding = 'same'
 		, use_bias=False
 		, activation='linear'
@@ -233,7 +231,7 @@ class Residual_CNN(Gen_Model):
 
 		model = Model(inputs=[main_input], outputs=[vh, ph])
 		model.compile(loss={'value_head': 'mean_squared_error', 'policy_head': softmax_cross_entropy_with_logits},
-			optimizer=SGD(lr=self.learning_rate, momentum = config.MOMENTUM),	
+			optimizer='adam',	
 			loss_weights={'value_head': 0.5, 'policy_head': 0.5}	
 			)
 
@@ -241,5 +239,5 @@ class Residual_CNN(Gen_Model):
 
 	def convertToModelInput(self, state):
 		inputToModel =  state.binary #np.append(state.binary, [(state.playerTurn + 1)/2] * self.input_dim[1] * self.input_dim[2])
-		inputToModel = np.reshape(inputToModel, self.input_dim) 
+		inputToModel = np.reshape(inputToModel, self.input_dim)
 		return (inputToModel)

@@ -18,7 +18,7 @@ class UniversalChessInterface:
         self._engine = eng 
 
     """
-    [do_uci()] responds to the input "uci" from the GUI to establish 
+    [uci()] responds to the input "uci" from the GUI to establish 
     communication. The engine prints the engine name and engine author to the 
     GUI followed by uciok, as required by the UCI protocol. The engine name 
     corresponds is stored in the global variable [ENGINE] and the engine author 
@@ -52,17 +52,17 @@ class UniversalChessInterface:
         print("readyok")
 
     """
-    [do_ucinewgame()] responds to the input "ucinewgame" from the GUI, indicating 
+    [ucinewgame()] responds to the input "ucinewgame" from the GUI, indicating 
     that the next search will be from a different game. The engine resets any of 
     its internal mechanisms that may need to be reset in order to consider a 
     different game.
     """
     def ucinewgame(self):
-        pass
+        self._engine.reset()
 
     
     """
-    [do_position(pos_str)] responds to the input "position" from the GUI, 
+    [position(pos_str)] responds to the input "position" from the GUI, 
     indicating that the engine should set up the position represented by [pos_str] 
     on its internal board. The position can either be set to the starting board or 
     a position represented by FEN notation, or kept the same as the current board 
@@ -87,13 +87,18 @@ class UniversalChessInterface:
 
 
     """
-    [do_go()] responds to the input "go" from the GUI, indicating that the engine 
+    [go()] responds to the input "go" from the GUI, indicating that the engine 
     should calculate the best move to make based on the current board state. The 
     engine responds with "bestmove" followed by the move in UCI notation, as 
     required by the UCI protocol.
     """
-    def go(self):
+    def go(self, searchmoves = None, movetime = 10000, infinite = False):
         #TODO change "make_random move" to a smarter move generation function
+        if searchmoves:
+            print("searchmoves is unimplemented")
+        if infinite:
+            print("infinite is unimplemented")
+
         move = self._engine.best_move() 
         print("bestmove "+move)
         pass

@@ -22,6 +22,7 @@ class Node():
 class Edge():
 
 	def __init__(self, inNode, outNode, prior, action):
+		print('prior', prior)
 		self.id = inNode.state.id + '|' + outNode.state.id
 		self.inNode = inNode
 		self.outNode = outNode
@@ -73,9 +74,9 @@ class MCTS():
 			Nb = 0
 			for action, edge in currentNode.edges:
 				Nb = Nb + edge.stats['N']
-
+			print('edgesnum', len(currentNode.edges))
 			for idx, (action, edge) in enumerate(currentNode.edges):
-
+				print('U: ', self.cpuct, epsilon, edge.stats['P'], nu[idx], Nb, edge.stats['N'])
 				U = self.cpuct * \
 					((1-epsilon) * edge.stats['P'] + epsilon * nu[idx] )  * \
 					np.sqrt(Nb) / (1 + edge.stats['N'])
@@ -85,7 +86,7 @@ class MCTS():
 				lg.logger_mcts.info('action: %d (%d)... N = %d, P = %f, nu = %f, adjP = %f, W = %f, Q = %f, U = %f, Q+U = %f'
 					, action, action % 7, edge.stats['N'], np.round(edge.stats['P'],6), np.round(nu[idx],6), ((1-epsilon) * edge.stats['P'] + epsilon * nu[idx] )
 					, np.round(edge.stats['W'],6), np.round(Q,6), np.round(U,6), np.round(Q+U,6))
-
+				print('Q + U', Q, U, Q+ U,  maxQU)
 				if Q + U > maxQU:
 					maxQU = Q + U
 					simulationAction = action
