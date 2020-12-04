@@ -92,9 +92,9 @@ class GameState():
         if result == '1/2-1/2':
             return (0.5, 0.5, 0.5)
         elif result == '1-0':
-            return (1,1,1) * self.playerTurn
+            return (self.playerTurn,self.playerTurn,self.playerTurn) 
         elif result == '0-1': 
-            return (-1,-1,-1) * self.playerTurn
+            return (-self.playerTurn,-self.playerTurn,-self.playerTurn)
         else:
             return (0,0,0)
         
