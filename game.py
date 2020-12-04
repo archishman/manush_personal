@@ -88,13 +88,13 @@ class GameState():
     def _getValue(self):
         # This is the value of the state for the current player
         # i.e. if the previous player played a winning move, you lose
-        result = self.board.mirror().result()
+        result = self.board.result()
         if result == '1/2-1/2':
             return (0.5, 0.5, 0.5)
         elif result == '1-0':
-            return (1,1,1)
+            return (1,1,1) * self.playerTurn
         elif result == '0-1': 
-            return (-1,-1,-1)
+            return (-1,-1,-1) * self.playerTurn
         else:
             return (0,0,0)
         
