@@ -7,7 +7,7 @@ from game import Game, GameState
 from model import Residual_CNN
 
 from agent import Agent, User
-
+import chess.pgn
 import net_config
 
 def playMatchesBetweenVersions(env, run_version, player1version, player2version, EPISODES, logger, turns_until_tau0, goes_first = 0):
@@ -50,7 +50,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory = N
         logger.info('EPISODE %d OF %d', e+1, EPISODES)
         logger.info('====================')
 
-        print(str(e+1) + ' ', end='')
+        print(str(e+1) + ' ')
 
         state = env.reset()
         
@@ -80,7 +80,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory = N
 
         while done == 0:
             turn = turn + 1
-    
+            print(len(state.board.move_stack), end=' ')
             #### Run the MCTS algo and return an action
             if turn < turns_until_tau0:
                 action, pi, MCTS_value, NN_value = players[state.playerTurn]['agent'].act(state, 1)
@@ -105,6 +105,9 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory = N
             env.gameState.render(logger)
 
             if done == 1: 
+                game = chess.pgn.Game()
+                game.add_line(state.board.move_stack)
+                print(game, state.score)
                 if memory != None:
                     #### If the game is finished, assign the values correctly to the game moves
                     for move in memory.stmemory:

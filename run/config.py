@@ -6,9 +6,9 @@ engine_config = {
 }
 
 #### SELF PLAY
-EPISODES = 2
-MCTS_SIMS = 10
-MEMORY_SIZE = 30
+EPISODES = 20
+MCTS_SIMS = 20
+MEMORY_SIZE = 7000
 TURNS_UNTIL_TAU0 = 10 # turn on which it starts playing deterministically
 CPUCT = 1
 EPSILON = 0.2
@@ -33,5 +33,6 @@ HIDDEN_CNN_LAYERS = [
 	]
 
 #### EVALUATION
-EVAL_EPISODES = 3
+EVAL_EPISODES = 25
 SCORING_THRESHOLD = 1.3
+

@@ -2,7 +2,10 @@ import numpy as np
 import logging
 from chess import Board
 import chess
+import chess.engine
 from itertools import product
+from chess.engine import Cp, Mate, MateGiven
+
 class Game:
 
     def __init__(self):        
@@ -35,6 +38,7 @@ class Game:
 
 
 class GameState():
+    engine = chess.engine.SimpleEngine.popen_uci('./stockfish')
     def __init__(self, board = None):
         if not board:
             self.board = Board()
@@ -73,7 +77,17 @@ class GameState():
         p1_q_castle = np.ones((8,8)) * self.board.has_queenside_castling_rights(chess.WHITE)
         p2_k_castle = np.ones((8,8)) * self.board.has_kingside_castling_rights(chess.BLACK)
         p2_q_castle = np.ones((8,8)) * self.board.has_queenside_castling_rights(chess.BLACK)
-        repetition = np.ones((8,8)) * self.board.can_claim_threefold_repetition() #only way I could think of to track 3-fold repetition, quite slow
+        repetition = np.ones((8,8))
+        try:
+            info = GameState.engine.analyse(self.board, chess.engine.Limit(depth=5))
+            score = info['score'].pov(self.board.turn)
+            if score.is_mate():
+                repetition = np.ones((8,8)) * score.mate()
+            else:
+                repetition = np.ones((8,8)) * score.score() / 1000 
+        except Exception:
+            GameState.engine = chess.engine.SimpleEngine.popen_uci('./stockfish')
+
         layers.extend([turn, move_count, no_progress, p1_k_castle, 
             p1_q_castle, p2_k_castle, p2_q_castle, repetition])
         return np.stack(layers, axis=0)
@@ -82,13 +96,29 @@ class GameState():
         return self.board.fen()
 
     def _checkForEndGame(self):
-        return self.board.is_game_over(claim_draw=True) and self.board.fullmove_number < 270
+        if self.board.fullmove_number < 150:
+            normal = self.board.is_checkmate() or self.board.is_stalemate() 
+            return normal or self.board.is_insufficient_material() or self.board.is_seventyfive_moves()
+        return True
 
 
     def _getValue(self):
         # This is the value of the state for the current player
         # i.e. if the previous player played a winning move, you lose
+        if self.board.fullmove_number >= 150:
+            info = GameState.engine.analyse(self.board, chess.engine.Limit(time=0.05))
+            score = info['score'].pov(self.board.turn)
+            zero = chess.engine.Cp(0)
+            print(score,end='')
+            if score == zero:
+                return (0, 0, 0)
+            elif score < zero:
+                return (-1, -1, -1)
+            else: 
+                return (1,1,1)
+        
         result = self.board.result()
+        
         if result == '1/2-1/2':
             return (0.5, 0.5, 0.5)
         elif result == '1-0':
