@@ -4,7 +4,7 @@ engine_config = {
     'VERSION' : 'v0.0',
     'AUTHORS' : 'Thomas Koconis and Archie Sravankumar'
 }
-
+ 
 #### SELF PLAY
 EPISODES = 20
 MCTS_SIMS = 20
